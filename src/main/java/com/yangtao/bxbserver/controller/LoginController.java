@@ -24,7 +24,9 @@ public class LoginController {
         if (login==null){
             return AjaxResult.error("账号不存在");
         }else if (!loginServer.Login(user).getPassword().equals(user.getPassword())){
-            return AjaxResult.error("密码错误");
+            System.out.println("xxxxxxxx");
+            return AjaxResult.error("密码错误xxxx");
+
         }else {
 //            Token myToken = new Token("admin-token");
             login.setToken("admin-token");
