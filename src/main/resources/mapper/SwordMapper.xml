@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yangtao.bxbserver.mapper.SwordMapper">
+
+    <!--    结果映射-->
+    <resultMap id="Sword" type="com.yangtao.bxbserver.domain.Sword">
+        <result property="swordId" column="sword_id"></result>
+        <result property="swordPicture" column="sword_picture"></result>
+        <result property="swordJname" column="sword_jname"></result>
+        <result property="swordCname" column="sword_cname"></result>
+        <result property="swordRare" column="sword_rare"></result>
+        <result property="swordLimit" column="sword_limit"></result>
+        <result property="swordElement" column="sword_element"></result>
+        <result property="swordKind" column="sword_kind"></result>
+        <result property="swordHp" column="sword_hp"></result>
+        <result property="swordAtk" column="sword_atk"></result>
+        <result property="swordDef" column="sword_def"></result>
+        <result property="swordBreak" column="sword_break"></result>
+        <result property="swordHole" column="sword_hole"></result>
+        <result property="swordHit" column="sword_hit"></result>
+        <result property="swordBdCost" column="sword_bdcost"></result>
+        <result property="swordSkill" column="sword_skill"></result>
+<!--        <result property="sPicture" column="sp.sword_picture_url"></result>-->
+    </resultMap>
+
+    <resultMap id="SwordPicture" type="com.yangtao.bxbserver.domain.SwordPicture">
+        <result property="swordPictureId" column="sword_picture_id"></result>
+        <result property="swordId" column="sword_id"></result>
+        <result property="swordPictureUrl" column="sword_picture_url"></result>
+    </resultMap>
+
+    <resultMap id="SwordCount" type="com.yangtao.bxbserver.domain.SwordCount">
+        <result property="sum_A" column="sum_A"></result>
+        <result property="sum_AA" column="sum_AA"></result>
+        <result property="sum_S" column="sum_S"></result>
+        <result property="sum_SS" column="sum_SS"></result>
+    </resultMap>
+    <!--    必须弄个结果映射啊 不然会报错！！！！！！！！！！！！！！！！-->
+    <!--    if中的后端参数 中间的为数据库字段 {}里面的为后端参数-->
+    <!--    这里前端传一个swordCname 作为中文 日语 以及技能的多个模糊查找 用or-->
+    <select id="selectSword" resultType="com.yangtao.bxbserver.domain.Sword" resultMap="Sword">
+        SELECT * FROM sword
+        <where>
+            <if test="swordCname != null  and swordCname != ''"> or sword_jname like concat('%', #{swordCname}, '%')</if>
+            <if test="swordCname != null  and swordCname != ''"> or sword_cname  like concat('%', #{swordCname}, '%')</if>
+            <if test="swordRare != null  and swordRare != ''"> and sword_rare = #{swordRare}</if>
+            <if test="swordLimit != null  and swordLimit != ''"> and sword_limit like concat('%', #{swordLimit}, '%')</if>
+            <if test="swordElement != null  and swordElement != ''"> and sword_element like concat('%', #{swordElement}, '%')</if>
+            <if test="swordKind != null  and swordKind != ''"> and sword_kind like concat('%', #{swordKind}, '%')</if>
+            <if test="swordHp != null  and swordHp != ''"> and sword_hp like concat('%', #{swordHp}, '%')</if>
+            <if test="swordAtk != null  and swordAtk != ''"> and sword_atk like concat('%', #{swordAtk}, '%')</if>
+            <if test="swordDef != null  and swordDef != ''"> and sword_def like concat('%', #{swordDef}, '%')</if>
+            <if test="swordBreak != null  and swordBreak != ''"> and sword_break like concat('%', #{swordBreak}, '%')</if>
+            <if test="swordHole != null  and swordHole != ''"> and sword_hole like concat('%', #{swordHole}, '%')</if>
+            <if test="swordHit != null  and swordHit != ''"> and sword_hit like concat('%', #{swordHit}, '%')</if>
+            <if test="swordBdCost != null  and swordBdCost != ''"> and sword_bdcost like concat('%', #{swordBdCost}, '%')</if>
+            <if test="swordCname != null  and swordCname != ''"> or sword_skill like concat('%', #{swordCname}, '%')</if>
+        </where>
+    </select>
+
+    <insert id="insertSword">
+        insert  into sword
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="swordPicture != null  and swordPicture != ''">sword_picture,</if>
+            <if test="swordJname != null  and swordJname != ''">sword_jname,</if>
+            <if test="swordCname != null  and swordCname != ''">sword_cname,</if>
+            <if test="swordRare != null  and swordRare != ''">sword_rare,</if>
+            <if test="swordLimit != null  and swordLimit != ''">sword_limit,</if>
+            <if test="swordElement != null  and swordElement != ''">sword_element,</if>
+            <if test="swordKind != null  and swordKind != ''">sword_kind,</if>
+            <if test="swordHp != null  and swordHp != ''">sword_hp,</if>
+            <if test="swordAtk != null  and swordAtk != ''">sword_atk,</if>
+            <if test="swordDef != null  and swordDef != ''">sword_def,</if>
+            <if test="swordBreak != null  and swordBreak != ''">sword_break,</if>
+            <if test="swordHole != null  and swordHole != ''">sword_hole,</if>
+            <if test="swordHit != null  and swordHit != ''">sword_hit,</if>
+            <if test="swordBdCost != null  and swordBdCost != ''">sword_bdcost,</if>
+            <if test="swordSkill != null  and swordSkill != ''">sword_skill,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="swordPicture != null  and swordPicture != ''">#{swordPicture},</if>
+            <if test="swordJname != null  and swordJname != ''">#{swordJname},</if>
+            <if test="swordCname != null  and swordCname != ''">#{swordCname},</if>
+            <if test="swordRare != null  and swordRare != ''">#{swordRare},</if>
+            <if test="swordLimit != null  and swordLimit != ''">#{swordLimit},</if>
+            <if test="swordElement != null  and swordElement != ''">#{swordElement},</if>
+            <if test="swordKind != null  and swordKind != ''">#{swordKind},</if>
+            <if test="swordHp != null  and swordHp != ''">#{swordHp},</if>
+            <if test="swordAtk != null  and swordAtk != ''">#{swordAtk},</if>
+            <if test="swordDef != null  and swordDef != ''">#{swordDef},</if>
+            <if test="swordBreak != null  and swordBreak != ''">#{swordBreak},</if>
+            <if test="swordHole != null  and swordHole != ''">#{swordHole},</if>
+            <if test="swordHit != null  and swordHit != ''">#{swordHit},</if>
+            <if test="swordBdCost != null  and swordBdCost != ''">#{swordBdCost},</if>
+            <if test="swordSkill != null  and swordSkill != ''">#{swordSkill},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSword">
+        update sword
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="swordPicture != null  and swordPicture != ''">sword_picture = #{swordPicture},</if>
+            <if test="swordJname != null  and swordJname != ''">sword_jname = #{swordJname},</if>
+            <if test="swordCname != null  and swordCname != ''">sword_cname = #{swordCname},</if>
+            <if test="swordRare != null  and swordRare != ''">sword_rare = #{swordRare},</if>
+            <if test="swordLimit != null  and swordLimit != ''">sword_limit = #{swordLimit},</if>
+            <if test="swordElement != null  and swordElement != ''">sword_element = #{swordElement},</if>
+            <if test="swordKind != null  and swordKind != ''">sword_kind = #{swordKind},</if>
+            <if test="swordHp != null  and swordHp != ''">sword_hp = #{swordHp},</if>
+            <if test="swordAtk != null  and swordAtk != ''">sword_atk = #{swordAtk},</if>
+            <if test="swordDef != null  and swordDef != ''">sword_def = #{swordDef},</if>
+            <if test="swordBreak != null  and swordBreak != ''">sword_break = #{swordBreak},</if>
+            <if test="swordHole != null  and swordHole != ''">sword_hole = #{swordHole},</if>
+            <if test="swordHit != null  and swordHit != ''">sword_hit = #{swordHit},</if>
+            <if test="swordBdCost != null  and swordBdCost != ''">sword_bdcost = #{swordBdCost},</if>
+            <if test="swordSkill != null  and swordSkill != ''">sword_skill = #{swordSkill},</if>
+        </trim>
+        where sword_id = #{swordId}
+    </update>
+
+<!--    删除魔剑-->
+    <delete id="deleteSwordById" parameterType="int">
+            delete from sword where sword_id = #{swordId}
+    </delete>
+
+<!--    删除立绘表里面关联的魔剑立绘-->
+    <delete id="deleteSwordPicture" parameterType="int">
+        delete from  swordpicture
+        where sword_id = #{swordId}
+    </delete>
+
+<!--    查询立绘表单-->
+    <select id="selectPicture" resultType="com.yangtao.bxbserver.domain.SwordPicture" resultMap="SwordPicture">
+        select sp.sword_picture_url
+        from sword s
+        left join swordpicture sp on sp.sword_id= s.sword_id
+        where s.sword_id = #{swordId}
+    </select>
+
+    <insert id="insertPicture" >
+        insert into swordpicture (sword_id,sword_picture_url) values (#{swordId},#{swordPictureUrl})
+    </insert>
+
+    <!--    查询立绘表单-->
+    <select id="selectCount" resultType="com.yangtao.bxbserver.domain.SwordCount" resultMap="SwordCount">
+        select
+            sum(sword_rare = 'A') as sum_A,
+            sum(sword_rare = 'AA') as sum_AA,
+            sum(sword_rare = 'S')as sum_S ,
+            sum(sword_rare = 'SS') as sum_SS
+        from sword;
+    </select>
+</mapper>
