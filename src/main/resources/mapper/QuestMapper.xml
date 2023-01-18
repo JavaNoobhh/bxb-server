@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yangtao.bxbserver.mapper.QuestMapper">
+    <!--    结果映射-->
+    <resultMap id="Quest" type="com.yangtao.bxbserver.domain.Quest">
+        <result property="questId" column="quest_id"></result>
+        <result property="questJname" column="quest_jname"></result>
+        <result property="questCname" column="quest_cname"></result>
+        <result property="questImage" column="quest_image"></result>
+        <result property="questKind" column="quest_kind"></result>
+        <result property="questDescription" column="quest_description"></result>
+    </resultMap>
+
+    <resultMap id="Reward" type="com.yangtao.bxbserver.domain.Reward">
+        <result property="rewardId" column="reward_id"></result>
+        <result property="rewardQuest" column="reward_quest"></result>
+        <result property="rewardKind" column="reward_kind"></result>
+        <result property="rewardItemId" column="reward_item_id"></result>
+    </resultMap>
+
+    <resultMap id="RewardForItem" type="com.yangtao.bxbserver.domain.RewardForItem">
+        <result property="rewardsId" column="reward_id"></result>
+        <result property="rewardsJname" column="item_jname"></result>
+        <result property="rewardsImage" column="item_image"></result>
+    </resultMap>
+
+    <resultMap id="RewardForSword" type="com.yangtao.bxbserver.domain.RewardForSword">
+        <result property="rewardsId" column="reward_id"></result>
+        <result property="swordJname" column="sword_jname"></result>
+        <result property="swordImage" column="sword_picture"></result>
+    </resultMap>
+
+    <resultMap id="RewardForSoul" type="com.yangtao.bxbserver.domain.RewardForSoul">
+        <result property="rewardsId" column="reward_id"></result>
+        <result property="soulJname" column="soul_jname"></result>
+        <result property="soulImage" column="soul_image"></result>
+    </resultMap>
+
+    <resultMap id="RewardForCrystal" type="com.yangtao.bxbserver.domain.RewardForCrystal">
+        <result property="rewardsId" column="reward_id"></result>
+        <result property="crystalJname" column="crystal_jname"></result>
+        <result property="crystalImage" column="crystal_image"></result>
+    </resultMap>
+
+
+<!--    查询所有任务-->
+    <select id="selectQuest" resultType="com.yangtao.bxbserver.domain.Quest" resultMap="Quest">
+        select * from quest
+    </select>
+
+<!--    查询任务物品的奖励-->
+    <select id="selectQuestReward" resultType="com.yangtao.bxbserver.domain.RewardForItem" resultMap="RewardForItem">
+        select r.reward_id,item_cname,i.item_image
+        from reward r
+        left join item i on i.item_id =  r.reward_kind_id
+        where r.reward_id = r.reward_kind_id
+    </select>
+
+<!--    查询该任务对应的奖励 分别在那几个数据库-->
+    <select id="selectRewardOfKind" resultType="String">
+        SELECT distinct reward_kind FROM reward where reward_quest = #{id}
+    </select>
+
+    <select id="selectRewardItem" resultType="com.yangtao.bxbserver.domain.RewardForItem" resultMap="RewardForItem">
+        select r.reward_id,item_jname,i.item_image
+        from reward r
+        left join item i on i.item_id = r.reward_kind_id
+        where r.reward_id = r.reward_kind_id
+    </select>
+
+    <select id="selectRewardSword" resultType="com.yangtao.bxbserver.domain.RewardForSword" resultMap="RewardForSword">
+        select r.reward_id,s.sword_jname,s.sword_picture
+        from reward r
+        left join sword s on s.sword_id =  r.reward_kind_id
+        where s.sword_id = r.reward_kind_id
+    </select>
+
+    <select id="selectRewardSoul" resultType="com.yangtao.bxbserver.domain.RewardForSoul" resultMap="RewardForSoul">
+        select r.reward_id,s.soul_jname,s.soul_image
+        from reward r
+        left join soul s on s.soul_id =  r.reward_kind_id
+        where s.soul_id = r.reward_kind_id
+    </select>
+
+    <select id="selectRewardCrystal" resultType="com.yangtao.bxbserver.domain.RewardForCrystal" resultMap="RewardForCrystal">
+        select r.reward_id,c.crystal_cname,c.crystal_image
+        from reward r
+        left join crystal c on c.crystal_id =  r.reward_kind_id
+        where c.crystal_id = r.reward_kind_id
+    </select>
+
+
+</mapper>

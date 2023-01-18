@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yangtao.bxbserver.mapper.CrystalMapper">
+    <!--    结果映射-->
+    <resultMap id="Crystal" type="com.yangtao.bxbserver.domain.Crystal">
+        <result property="crystalId" column="crystal_id"></result>
+        <result property="crystalJname" column="crystal_jname"></result>
+        <result property="crystalImage" column="crystal_image"></result>
+        <result property="crystalStar" column="crystal_star"></result>
+        <result property="crystalType" column="crystal_type"></result>
+        <result property="crystalEffectType" column="crystal_effect_type"></result>
+        <result property="crystalKind" column="crystal_kind"></result>
+        <result property="crystalElement" column="crystal_element"></result>
+        <result property="crystalPower" column="crystal_power"></result>
+        <result property="crystalActualPower" column="crystal_actual_power"></result>
+        <result property="crystalUpLimit" column="crystal_uplimit"></result>
+        <result property="crystalEffect" column="crystal_effect"></result>
+        <result property="crystalAcquisition" column="crystal_acquisition"></result>
+    </resultMap>
+
+<!--    查询全部结晶信息-->
+    <select id="selectCrystal" resultType="com.yangtao.bxbserver.domain.Crystal" resultMap="Crystal">
+        SELECT * FROM crystal
+        <where>
+            <if test="crystalJname != null  and crystalJname != ''"> and crystal_jname like concat('%', #{crystalJname}, '%')</if>
+            <if test="crystalType != null  and crystalType != ''"> and crystal_type  like concat('%', #{crystalType}, '%')</if>
+            <if test="crystalElement != null  and crystalElement != ''"> and crystal_element = #{crystalElement}</if>
+            <if test="crystalKind != null  and crystalKind != ''"> and crystal_kind like concat('%', #{crystalKind}, '%')</if>
+        </where>
+    </select>
+
+<!--    添加结晶信息-->
+    <insert id="insertCrystal">
+        insert into crystal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="crystalJname != null  and crystalJname != ''">crystal_jname,</if>
+            <if test="crystalStar != null  and crystalStar != ''">crystal_star,</if>
+            <if test="crystalType != null  and crystalType != ''">crystal_type,</if>
+            <if test="crystalEffectType != null  and crystalEffectType != ''">crystal_effect_type,</if>
+            <if test="crystalKind != null  and crystalKind != ''">crystal_kind,</if>
+            <if test="crystalElement != null  and crystalElement != ''">crystal_element,</if>
+            <if test="crystalPower != null  and crystalPower != ''">crystal_power,</if>
+            <if test="crystalActualPower != null  and crystalActualPower != ''">crystal_actual_power,</if>
+            <if test="crystalUpLimit != null  and crystalUpLimit != ''">crystal_uplimit,</if>
+            <if test="crystalEffect != null  and crystalEffect != ''">crystal_effect,</if>
+            <if test="crystalAcquisition != null  and crystalAcquisition != ''">crystal_acquisition,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="crystalJname != null  and crystalJname != ''">#{crystalJname},</if>
+            <if test="crystalStar != null  and crystalStar != ''">#{crystalStar},</if>
+            <if test="crystalType != null  and crystalType != ''">#{crystalType},</if>
+            <if test="crystalEffectType != null  and crystalEffectType != ''">#{crystalEffectType},</if>
+            <if test="crystalKind != null  and crystalKind != ''">#{crystalKind},</if>
+            <if test="crystalElement != null  and crystalElement != ''">#{crystalElement},</if>
+            <if test="crystalPower != null  and crystalPower != ''">#{crystalPower},</if>
+            <if test="crystalActualPower != null  and crystalActualPower != ''">#{crystalActualPower},</if>
+            <if test="crystalUpLimit != null  and crystalUpLimit != ''">#{crystalUpLimit},</if>
+            <if test="crystalEffect != null  and crystalEffect != ''">#{crystalEffect},</if>
+            <if test="crystalAcquisition != null  and crystalAcquisition != ''">#{crystalAcquisition},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteCrystal" parameterType="int">
+        delete from crystal
+        where crystal_id = #{crystalId}
+    </delete>
+
+<!--    <update id="updateCrystal">-->
+<!--        update crystal-->
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="crystalJname != null  and crystalJname != ''">crystal_jname = #{crystalJname},</if>-->
+<!--            <if test="crystalStar != null  and crystalStar != ''">crystal_star = #{crystalStar},</if>-->
+<!--            <if test="crystalType != null  and crystalType != ''">crystal_type = #{crystalType},</if>-->
+<!--            <if test="crystalEffectType != null  and crystalEffectType != ''">crystal_effect_type = #{crystalEffectType},</if>-->
+<!--            <if test="crystalKind != null  and crystalKind != ''">crystal_kind = #{crystalKind},</if>-->
+<!--            <if test="crystalElement != null  and crystalElement != ''">crystal_element = #{crystalElement},</if>-->
+<!--            <if test="crystalPower != null  and crystalPower != ''">crystal_power = #{crystalPower},</if>-->
+<!--            <if test="crystalActualPower != null  and crystalActualPower != ''">crystal_actual_power = #{crystalActualPower},</if>-->
+<!--            <if test="crystalUpLimit != null  and crystalUpLimit != ''">crystal_uplimit = #{crystalUpLimit},</if>-->
+<!--            <if test="crystalEffect != null  and crystalEffect != ''">crystal_effect = #{crystalEffect},</if>-->
+<!--            <if test="crystalAcquisition != null  and crystalAcquisition != ''">crystal_acquisition = #{crystalAcquisition},</if>-->
+<!--        </trim>-->
+<!--        where crystal_id = #{crystalId}-->
+<!--    </update>-->
+
+    <update id="updateCrystal">
+        update crystal
+        set crystal_jname = #{crystalJname},crystal_image = #{crystalImage},crystal_star = #{crystalStar},crystal_type = #{crystalType},
+            crystal_effect_type = #{crystalEffectType},crystal_kind = #{crystalKind},crystal_element = #{crystalElement},
+            crystal_power = #{crystalPower},crystal_actual_power = #{crystalActualPower},crystal_uplimit = #{crystalUpLimit},
+            crystal_effect = #{crystalEffect},crystal_acquisition = #{crystalAcquisition}
+        where crystal_id = #{crystalId}
+    </update>
+
+</mapper>

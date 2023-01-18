@@ -23,18 +23,40 @@
 <!--        <result property="sPicture" column="sp.sword_picture_url"></result>-->
     </resultMap>
 
+<!--    立绘表-->
     <resultMap id="SwordPicture" type="com.yangtao.bxbserver.domain.SwordPicture">
         <result property="swordPictureId" column="sword_picture_id"></result>
         <result property="swordId" column="sword_id"></result>
         <result property="swordPictureUrl" column="sword_picture_url"></result>
     </resultMap>
 
+<!--    魔剑统计表-->
     <resultMap id="SwordCount" type="com.yangtao.bxbserver.domain.SwordCount">
         <result property="sum_A" column="sum_A"></result>
         <result property="sum_AA" column="sum_AA"></result>
         <result property="sum_S" column="sum_S"></result>
         <result property="sum_SS" column="sum_SS"></result>
     </resultMap>
+
+<!--    魔剑评论表-->
+    <resultMap id="Comment" type="com.yangtao.bxbserver.domain.Comment">
+        <result property="commentId" column="comment_id"></result>
+        <result property="commentUserName" column="user_name"></result>
+        <result property="commentUserAvatar" column="user_avatar"></result>
+        <result property="commentKind" column="user_kind"></result>
+        <result property="commentChannel" column="comment_channel"></result>
+        <result property="commentContent" column="comment_content"></result>
+        <result property="commentTime" column="comment_time"></result>
+    </resultMap>
+
+    <!--    魔剑评论点赞-->
+    <resultMap id="Like" type="com.yangtao.bxbserver.domain.Like">
+        <result property="likeId" column="like_id"></result>
+        <result property="likeCommentId" column="like_comment_id"></result>
+        <result property="likeUserId" column="like_user_id"></result>
+    </resultMap>
+
+
     <!--    必须弄个结果映射啊 不然会报错！！！！！！！！！！！！！！！！-->
     <!--    if中的后端参数 中间的为数据库字段 {}里面的为后端参数-->
     <!--    这里前端传一个swordCname 作为中文 日语 以及技能的多个模糊查找 用or-->
@@ -98,29 +120,34 @@
 
     <update id="updateSword">
         update sword
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="swordPicture != null  and swordPicture != ''">sword_picture = #{swordPicture},</if>
-            <if test="swordJname != null  and swordJname != ''">sword_jname = #{swordJname},</if>
-            <if test="swordCname != null  and swordCname != ''">sword_cname = #{swordCname},</if>
-            <if test="swordRare != null  and swordRare != ''">sword_rare = #{swordRare},</if>
-            <if test="swordLimit != null  and swordLimit != ''">sword_limit = #{swordLimit},</if>
-            <if test="swordElement != null  and swordElement != ''">sword_element = #{swordElement},</if>
-            <if test="swordKind != null  and swordKind != ''">sword_kind = #{swordKind},</if>
-            <if test="swordHp != null  and swordHp != ''">sword_hp = #{swordHp},</if>
-            <if test="swordAtk != null  and swordAtk != ''">sword_atk = #{swordAtk},</if>
-            <if test="swordDef != null  and swordDef != ''">sword_def = #{swordDef},</if>
-            <if test="swordBreak != null  and swordBreak != ''">sword_break = #{swordBreak},</if>
-            <if test="swordHole != null  and swordHole != ''">sword_hole = #{swordHole},</if>
-            <if test="swordHit != null  and swordHit != ''">sword_hit = #{swordHit},</if>
-            <if test="swordBdCost != null  and swordBdCost != ''">sword_bdcost = #{swordBdCost},</if>
-            <if test="swordSkill != null  and swordSkill != ''">sword_skill = #{swordSkill},</if>
-        </trim>
+        set sword_picture = #{swordPicture},sword_jname = #{swordJname},sword_cname = #{swordCname},sword_rare = #{swordRare}
+            sword_limit = #{swordLimit},sword_element = #{swordElement},sword_kind = #{swordKind},sword_hp = #{swordHp},
+            sword_atk = #{swordAtk},sword_def = #{swordDef},sword_break = #{swordBreak},sword_hole = #{swordHole},
+            sword_hit = #{swordHit},sword_bdcost = #{swordBdCost},sword_skill = #{swordSkill}
         where sword_id = #{swordId}
+<!--        <trim prefix="SET" suffixOverrides=",">-->
+<!--            <if test="swordPicture != null  and swordPicture != ''">sword_picture = #{swordPicture},</if>-->
+<!--            <if test="swordJname != null  and swordJname != ''">sword_jname = #{swordJname},</if>-->
+<!--            <if test="swordCname != null  and swordCname != ''">sword_cname = #{swordCname},</if>-->
+<!--            <if test="swordRare != null  and swordRare != ''">sword_rare = #{swordRare},</if>-->
+<!--            <if test="swordLimit != null  and swordLimit != ''">sword_limit = #{swordLimit},</if>-->
+<!--            <if test="swordElement != null  and swordElement != ''">sword_element = #{swordElement},</if>-->
+<!--            <if test="swordKind != null  and swordKind != ''">sword_kind = #{swordKind},</if>-->
+<!--            <if test="swordHp != null  and swordHp != ''">sword_hp = #{swordHp},</if>-->
+<!--            <if test="swordAtk != null  and swordAtk != ''">sword_atk = #{swordAtk},</if>-->
+<!--            <if test="swordDef != null  and swordDef != ''">sword_def = #{swordDef},</if>-->
+<!--            <if test="swordBreak != null  and swordBreak != ''">sword_break = #{swordBreak},</if>-->
+<!--            <if test="swordHole != null  and swordHole != ''">sword_hole = #{swordHole},</if>-->
+<!--            <if test="swordHit != null  and swordHit != ''">sword_hit = #{swordHit},</if>-->
+<!--            <if test="swordBdCost != null  and swordBdCost != ''">sword_bdcost = #{swordBdCost},</if>-->
+<!--            <if test="swordSkill != null  and swordSkill != ''">sword_skill = #{swordSkill},</if>-->
+<!--        </trim>-->
+<!--        where sword_id = #{swordId}-->
     </update>
 
 <!--    删除魔剑-->
     <delete id="deleteSwordById" parameterType="int">
-            delete from sword where sword_id = #{swordId}
+        delete from sword where sword_id = #{swordId}
     </delete>
 
 <!--    删除立绘表里面关联的魔剑立绘-->
@@ -137,8 +164,15 @@
         where s.sword_id = #{swordId}
     </select>
 
+<!--    添加魔剑前进行是否重复的验证-->
+    <select id="selectSwordNameForInsert" resultType="com.yangtao.bxbserver.domain.Sword" resultMap="Sword">
+        select * from sword
+        where sword_jname = #{swordJname}
+    </select>
+
     <insert id="insertPicture" >
-        insert into swordpicture (sword_id,sword_picture_url) values (#{swordId},#{swordPictureUrl})
+        insert into swordpicture (sword_id,sword_picture_url)
+        values (#{swordId},#{swordPictureUrl})
     </insert>
 
     <!--    查询立绘表单-->
@@ -150,4 +184,51 @@
             sum(sword_rare = 'SS') as sum_SS
         from sword;
     </select>
+
+    <!--    查询用户对魔剑的评论-->
+    <select id="selectComment" resultType="com.yangtao.bxbserver.domain.Comment" resultMap="Comment">
+        select c.comment_id,u.user_name,u.user_avatar,c.comment_content,c.comment_time
+        from comment c
+        left join user u on c.comment_user_id = u.user_id
+        where c.comment_kind = #{commentKind} and c.comment_channel = #{commentChannel}
+        order by comment_id desc
+    </select>
+
+<!--    发表评论-->
+    <insert id="insertComment">
+        insert into comment (comment_user_id,comment_kind,comment_channel,comment_content,comment_time)
+        values(#{commentId},#{commentKind},#{commentChannel},#{commentContent},#{commentTime})
+    </insert>
+    
+<!--    删除评论-->
+    <delete id="deleteComment" parameterType="int">
+        delete from comment
+        where comment_id = #{commentId}
+    </delete>
+
+    <!--  添加点赞-->
+    <insert id="insertLike">
+        insert into commentlike (like_comment_id,like_user_id)
+        values(#{likeCommentId},#{likeUserId})
+    </insert>
+
+<!--    查询该评论点赞总数-->
+    <select id="selectLikeCount" resultType="Integer" >
+        select count(like_comment_id) as likeSum
+        from commentlike
+        where like_comment_id = #{likeCommentId}
+    </select>
+
+<!--    用当前评论的id查询对其点赞的用户-->
+    <select id="selectLikeUser" resultType="com.yangtao.bxbserver.domain.Like" resultMap="Like">
+        select *
+        from commentlike
+        where like_comment_id = #{likeCommentID};
+    </select>
+
+    <delete id="deleteCommentLike">
+        delete from commentlike
+        where like_comment_id = #{commentId}
+    </delete>
+
 </mapper>

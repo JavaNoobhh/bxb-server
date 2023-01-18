@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Token {
-    private String token;
+public class Reward {
+
+    private Integer rewardId;
+    private String rewardQuest;
+    private String rewardKind;
+    private String rewardItemId;
+
 }

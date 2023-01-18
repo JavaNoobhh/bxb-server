@@ -1,5 +1,7 @@
 server:
   port: 8080
+#  这里请求头太大了 必须设置这个 不然前端传来的小作文收不到回报 Request header is too large
+  max-http-header-size: 1024000
 spring:
   datasource:
     username: root

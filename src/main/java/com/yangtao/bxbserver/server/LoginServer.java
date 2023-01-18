@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @Repository
 public class LoginServer {
@@ -18,5 +16,6 @@ public class LoginServer {
     public User Login(User user){
         return loginMapper.selectUser(user);
     }
+
 
 }

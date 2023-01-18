@@ -10,5 +10,4 @@ public interface LoginMapper {
 
     User selectUser(User user);
 
-    User getInfo(User user);
 }

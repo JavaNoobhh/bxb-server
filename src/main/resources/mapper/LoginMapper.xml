@@ -6,11 +6,14 @@
         <result property="userId" column="user_id"></result>
         <result property="username" column="user_name"></result>
         <result property="password" column="user_password"></result>
+        <result property="roles" column="user_role"></result>
         <result property="userAvatar" column="user_avatar"></result>
+        <result property="introduction" column="user_introduction"></result>
     </resultMap>
     
     <select id="selectUser" resultType="com.yangtao.bxbserver.domain.User" resultMap="User">
         select * from user where #{username} = user_name
     </select>
+
 
 </mapper>

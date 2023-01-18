@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yangtao.bxbserver.mapper.ItemMapper">
+    <!--    结果映射-->
+    <resultMap id="Item" type="com.yangtao.bxbserver.domain.Item">
+        <result property="itemId" column="item_id"></result>
+        <result property="itemJname" column="item_jname"></result>
+        <result property="itemCname" column="item_cname"></result>
+        <result property="itemImage" column="item_image"></result>
+        <result property="itemDescription" column="item_description"></result>
+    </resultMap>
+
+    <select id="selectItem"  resultType="com.yangtao.bxbserver.domain.Item" resultMap="Item">
+        select * from item
+        <where>
+            <if test="itemCname != null  and itemCname != ''"> or item_jname like concat('%', #{itemCname}, '%')</if>
+            <if test="itemCname != null  and itemCname != ''"> or item_cname  like concat('%', #{itemCname}, '%')</if>
+        </where>
+    </select>
+
+    <insert id="insertItem">
+        insert into item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemJname != null  and itemJname != ''">item_jname,</if>
+            <if test="itemCname != null  and itemCname != ''">item_cname,</if>
+            <if test="itemDescription != null  and itemDescription != ''">item_description,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemJname != null  and itemJname != ''">#{itemJname},</if>
+            <if test="itemCname != null  and itemCname != ''">#{itemCname},</if>
+            <if test="itemDescription != null  and itemDescription != ''">#{itemDescription},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteItem">
+        delete from item where item_id = #{itemId}
+    </delete>
+
+    <update id="updateItem" >
+        update item
+        set  item_jname = #{itemJname},item_cname = #{itemCname},item_image = #{itemImage},item_description = #{itemDescription}
+        where item_id = #{itemId}
+    </update>
+
+
+
+
+</mapper>

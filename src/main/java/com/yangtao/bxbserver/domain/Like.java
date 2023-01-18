@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Page {
-    private int pageNum;
-    private int pageSize;
+public class Like {
+    private Integer likeId;
+    private Integer likeCommentId;
+    private Integer likeUserId;
 }

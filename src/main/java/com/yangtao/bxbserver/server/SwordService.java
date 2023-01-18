@@ -12,10 +12,7 @@ import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
-import com.yangtao.bxbserver.domain.Page;
-import com.yangtao.bxbserver.domain.Sword;
-import com.yangtao.bxbserver.domain.SwordCount;
-import com.yangtao.bxbserver.domain.SwordPicture;
+import com.yangtao.bxbserver.domain.*;
 import com.yangtao.bxbserver.mapper.SwordMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,9 +40,9 @@ public class SwordService {
      * @param sword
      * @return
      */
-    public PageInfo<Sword> selectSword(Sword sword,Page page) {
+    public PageInfo<Sword> selectSword(Sword sword,int pageNum,int pageSize) {
 
-        PageHelper.startPage(page.getPageNum(),page.getPageSize()); //接收前端传来的分页数据分页 PageNum当前页数 PageNum分几页
+        PageHelper.startPage(pageNum,pageSize); //接收前端传来的分页数据分页 PageNum当前页数 PageNum分几页
         List<Sword> swords = swordMapper.selectSword(sword); //这里直接调用mapper的sql  这三个顺序就这样 不能乱
         PageInfo<Sword> pageInfo = new PageInfo<Sword>(swords);  //获取分页结果
 
@@ -89,6 +88,10 @@ public class SwordService {
      */
     public int insertSword(Sword sword){
         return swordMapper.insertSword(sword);
+    }
+
+    public List<Sword> selectSwordNameForInsert(String swordJname){
+        return swordMapper.selectSwordNameForInsert(swordJname);
     }
 
     /**
@@ -168,8 +171,42 @@ public class SwordService {
         }
     }
 
+    //查询用户对魔剑的评论
+    public List<Comment> selectComment(int commentKind,int commentChannel){
+        List<Comment> comments = swordMapper.selectComment(commentKind,commentChannel); //拿到所有的评论
+        for (Comment comment : comments) {    //遍历每一条评论 用他们的id走一次接口获取对应的点赞总数 再存进去
+            Integer commentId = comment.getCommentId();
+            List<Like> likes = swordMapper.selectLikeUser(commentId);//用当前评论的id查询对其点赞的用户
+            if (likes!=null){
+                int[] arr = new int[likes.size()];
+                for(int i = 0;i<likes.size();i++){
+                    if(likes.get(i)!=null){  //加一个判断 存一个空进去下面会报空指针
+                        arr[i]  = likes.get(i).getLikeUserId(); //for 循环将每一个点过赞的用户的id存进去
+                    }
+                }
+                comment.setCommentLikeUser(arr);
+            }
+            comment.setCommentLikeCount(swordMapper.selectLikeCount(commentId));
+        }
+        return comments;
+    }
 
+    //添加用户对魔剑的评论
+    public int insertComment(Comment comment){
+        comment.setCommentTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        return swordMapper.insertComment(comment);
+    }
 
+//    删除用户对魔剑的一条评论
+    public int deleteDelete(int commentId){
+        swordMapper.deleteCommentLike(commentId);
+        return swordMapper.deleteComment(commentId);
+    }
+
+//    添加对魔剑评论的点赞
+    public int insertLike(Like like){
+        return swordMapper.insertLike(like);
+    }
 
 
 }
